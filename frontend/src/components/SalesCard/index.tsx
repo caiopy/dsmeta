@@ -1,9 +1,13 @@
-import { NotificationButton } from "../NotificationButton";
-import DatePicker from "react-datepicker";
+import axios from 'axios';
 
-import "react-datepicker/dist/react-datepicker.css";
-import "./styles.css";
-import { useState } from "react";
+import { NotificationButton } from '../NotificationButton';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import './styles.css';
+import { useEffect, useState } from 'react';
+import { BASE_URL } from '../../utils/request';
+import { Sale } from '../../models /sale';
 
 export const SalesCard = () => {
   const min = new Date(new Date().setDate(new Date().getDate() - 365)); // one year ago
@@ -11,6 +15,13 @@ export const SalesCard = () => {
 
   const [minDate, setMinDate] = useState(min);
   const [maxDate, setMaxDate] = useState(max);
+  const [sales, setSales] = useState<Sale[]>([]);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/sales`).then((res) => {
+      setSales(res.data.content);
+    });
+  }, []);
 
   return (
     <div className="dsmeta-card">
